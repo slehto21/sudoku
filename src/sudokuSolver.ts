@@ -1,46 +1,46 @@
-const sudokuBoard: number[][] = [ 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
-    [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ] 
-];
-
-function solveSudoku(){
-    fillGrid();
-    if(isValidStartingBoard(sudokuBoard)){
-        solveSudokuBoard(sudokuBoard);
-        fillClientGrid();
+export function solveSudoku(){
+    const board = generateEmptySudoku();
+    fillBoard(board);
+    if(isValidStartingBoard(board)){
+        solveSudokuBoard(board);
+        fillClientBoard(board);
     }
     else{
         alert('Invalid starting board!')
     }   
 }
 
-function resetSudoku(){
-    for(let row = 0; row < 9; row++){
-        for(let col = 0; col < 9; col++){
-            sudokuBoard[row][col] = 0;
-        }
-    }
-    fillClientGrid();
+export function resetSudoku(){
+    let board = generateEmptySudoku();
+    fillClientBoard(board);
 }
 
-function fillGrid(){
+export function generateEmptySudoku(){
+    const sudokuBoard: number[][] = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    return sudokuBoard;
+}
+
+function fillBoard(board : number[][]){
     for(let row = 0; row < 9; row++){
         for(let col = 0; col < 9; col++){
             const inputId = `cell${row}${col}`;
             const input = document.getElementById(inputId) as HTMLInputElement;
             const value = input.value;
             if(value !== ""){
-                sudokuBoard[row][col] = parseInt(value);
+                board[row][col] = parseInt(value);
             }
             else{
-                sudokuBoard[row][col] = 0;
+                board[row][col] = 0;
             }
         }
     }
@@ -53,6 +53,9 @@ function isValidStartingBoard(board : number[][]){
         const boxSet = new Set<number>();
         for(let col = 0; col < 9; col++){
             if(board[row][col] !== 0){
+                if(isNaN(board[row][col])){
+                    return false;
+                }
                 if(rowSet.has(board[row][col])){
                     return false;
                 }
@@ -60,6 +63,9 @@ function isValidStartingBoard(board : number[][]){
             }
 
             if(board[col][row] !== 0){
+                if(isNaN(board[col][row])){
+                    return false;
+                }
                 if(colSet.has(board[col][row])){
                     return false;
                 }
@@ -72,6 +78,9 @@ function isValidStartingBoard(board : number[][]){
             const boxCol = colOffset + (col % 3);
 
             if (board[boxRow][boxCol] !== 0) {
+                if(isNaN(board[boxRow][boxCol])){
+                    return false;
+                }
                 if (boxSet.has(board[boxRow][boxCol])){
                     return false;
                 } 
@@ -81,6 +90,8 @@ function isValidStartingBoard(board : number[][]){
     }
     return true;
 }
+
+
 
 function isNumberInRow(board : number[][], row : number, num : number){
     for(let i = 0; i < 9; i++){
@@ -113,11 +124,11 @@ function isNumberInBox(board : number[][], row : number, col : number, num : num
     return false;
 }
 
-function isValidMove(board : number[][], row : number, col : number, num : number){
+export function isValidMove(board : number[][], row : number, col : number, num : number){
     return !isNumberInRow(board, row, num) && !isNumberInCol(board, col, num) && !isNumberInBox(board, row, col, num);
 }
 
-function solveSudokuBoard(board : number[][]){
+export function solveSudokuBoard(board : number[][]){
     for(let row = 0; row < 9; row++){
         for(let col = 0; col < 9; col++){
             if(board[row][col] === 0){
@@ -139,20 +150,20 @@ function solveSudokuBoard(board : number[][]){
     return true;
 }
 
-function fillClientGrid(){
+export function fillClientBoard(board : number[][]){
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             const inputId = `cell${row}${col}`;
             const input = document.getElementById(inputId) as HTMLInputElement;
 
             if (input) {
-                input.value = sudokuBoard[row][col] !== 0 ? sudokuBoard[row][col].toString() : '';
+                input.value = board[row][col] !== 0 ? board[row][col].toString() : '';
             }
         }
     }
 }
 
-function printSudoku(board : number[][]){
+export function printSudoku(board : number[][]){
     for(let row = 0; row < board.length; row++){
         let line = "";
         for(let col = 0; col < board[row].length; col++){

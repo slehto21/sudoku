@@ -11,6 +11,10 @@ body {
 h1 {
     text-align: center;
     margin-bottom: 20px;
+    margin-right: 15%;
+}
+h2 {
+    text-align: center;
 }
 table {
     border-collapse: collapse;
@@ -41,6 +45,51 @@ button {
     color: white;
     border: none;
     border-radius: 5px;
+}
+.sudokuContainer{
+    display: flex;
+    /*align-items: start;*/
+    justify-content: space-between;
+}
+.sudokuGrid {
+    width: 360px; /* Increased size */
+    height: 360px; /* Increased size */
+    border: 2px solid #000; /* Thicker border */
+    display: grid;
+}
+.generateControls {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 20px;
+}
+.generateButtons {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+.generateButtons button {
+    background-color: #313131;
+    margin-bottom: 10px;
+    width: 120px; /* Wider buttons */
+    padding: 15px; /* More padding for better clickability */
+}
+.generateButtons button:hover {
+    background-color: #1a1919;
+}
+.bottomButtons {
+    width: 380px; /* Match the width of your Sudoku grid for alignment */
+    display: flex;
+    justify-content: space-between; /* Adjust this to center if you prefer */
+    margin-top: 20px; /* Space between the grid and the buttons */
+    transform: translateX(-110px);
+}
+.bottomButtons button {
+    flex-grow: 1; /* Each button takes equal space */
+    margin: 0 5px; /* Spacing between buttons */
+    padding: 10px 20px; /* Padding for better touch */
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
 }
 #solveButton{
     background-color: #4CAF50;
