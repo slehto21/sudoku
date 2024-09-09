@@ -1,14 +1,32 @@
 import { fillClientBoard, solveSudokuBoard, isValidMove, generateEmptySudoku } from "./sudokuSolver.js";
+import { resetWrongMoves } from "./sudokuCheck.js";
+import { resetHints } from "./sudokuHint.js";
 
 let solutionCounter = 0;
 
+export let solvedBoard: number[][] = [];
+
 export function generateSudoku(difficulty : String) {
+    resetStyles();
     const board = generateEmptySudoku()
     initializeWithNums(board, 10);
     solveSudokuBoard(board);
+    solvedBoard = board.map(row => row.slice());
+    resetWrongMoves();
+    resetHints();
     removeNums(board, difficulty);
     fillClientBoard(board);
 }
+
+function resetStyles() {
+    const cells = document.querySelectorAll('.sudokuGrid input[type="text"]');
+    cells.forEach((cell) => {
+        const inputElement = cell as HTMLInputElement;
+        inputElement.style.backgroundColor = '';  // Nollaa taustaväri
+        inputElement.style.color = '';  // Nollaa tekstin väri
+    });
+}
+
 
 function initializeWithNums(board: number[][], initialCount: number) {
     let count = 0;
@@ -40,11 +58,8 @@ function determineNumsToRemove(difficulty: String) {
     else if (difficulty === "Medium") {
         numsToRemove = 55;
     }
-    else if (difficulty == "Easy"){
-        numsToRemove = 45
-    }
     else{
-        numsToRemove = 0;
+        numsToRemove = 45;
     }
     return numsToRemove;
 }

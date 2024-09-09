@@ -4,13 +4,15 @@
     <title>Sudoku Solver</title>
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <script type="module" src="build/eventHandlers.js"></script>
+    <script type="module" src="build/sudokuCheck.js"></script>
+    <script type="module" src="build/validateInput.js"></script>
 </head>
 
 <body>
-    <h1>Sudoku Solver</h1>
+    <h1>Sudoku</h1>
     <div class="sudokuContainer">
         <div class="sudokuGrid">
-            <table>
+            <table id="sudokuTable" class="sudoku" oninput="validateInput(event)">
                 <tr>
                     <td><input type="text" id="cell00" size="1" maxlength="1"></td>
                     <td><input type="text" id="cell01" size="1" maxlength="1"></td>
@@ -119,10 +121,13 @@
                 <button type="button" id="mediumButton">Medium</button>
                 <button type="button" id="hardButton">Hard</button>
             </div>
+            <p id="wrongMovesCounter"></p>
+            <p id="hintsCounter"></p>
         </div>
     </div>
     <div class="bottomButtons">
         <button type="button" id="solveButton">Solve</button>
+        <button type="button" id="hintButton">Hint</button>
         <button type="button" id="resetButton">Reset</button>
     </div>
 

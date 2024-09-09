@@ -97,6 +97,12 @@ button {
 #solveButton:hover{
     background-color: #347838;
 }
+#hintButton{
+    background-color: #58adf8;
+}
+#hintButton:hover{
+    background-color: #396d9a;
+}
 #resetButton{
     background-color: #ec3434;
 }
