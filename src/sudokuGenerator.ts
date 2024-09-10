@@ -1,13 +1,15 @@
-import { fillClientBoard, solveSudokuBoard, isValidMove, generateEmptySudoku } from "./sudokuSolver.js";
+import { fillClientBoard, solveSudokuBoard, isValidMove, generateEmptySudoku, resetStyles } from "./sudokuSolver.js";
 import { resetWrongMoves } from "./sudokuCheck.js";
 import { resetHints } from "./sudokuHint.js";
 import { resetTimer, startTimer } from "./sudokuTimer.js";
 
 let solutionCounter = 0;
+let isGameRunning = false;
 
 export let solvedBoard: number[][] = [];
 
-export function generateSudoku(difficulty : String) {
+export function generateSudoku(difficulty: String) {
+    setGameRunning(true);
     resetStyles();
     const board = generateEmptySudoku()
     initializeWithNums(board, 10);
@@ -20,16 +22,6 @@ export function generateSudoku(difficulty : String) {
     removeNums(board, difficulty);
     fillClientBoard(board);
 }
-
-function resetStyles() {
-    const cells = document.querySelectorAll('.sudokuGrid input[type="text"]');
-    cells.forEach((cell) => {
-        const inputElement = cell as HTMLInputElement;
-        inputElement.style.backgroundColor = '';
-        inputElement.style.color = ''; 
-    });
-}
-
 
 function initializeWithNums(board: number[][], initialCount: number) {
     let count = 0;
@@ -61,7 +53,7 @@ function determineNumsToRemove(difficulty: String) {
     else if (difficulty === "Medium") {
         numsToRemove = 55;
     }
-    else{
+    else {
         numsToRemove = 45;
     }
     return numsToRemove;
@@ -71,42 +63,42 @@ function removeNums(board: number[][], difficulty: String) {
     let numsToRemove = determineNumsToRemove(difficulty);
     const dupBoard = board.map((row) => row.slice());
 
-    while(numsToRemove > 0){
+    while (numsToRemove > 0) {
         const randomRow = Math.floor(Math.random() * 9);
         const randomCol = Math.floor(Math.random() * 9);
 
-        if(board[randomRow][randomCol] !== 0){
+        if (board[randomRow][randomCol] !== 0) {
             board[randomRow][randomCol] = 0;
             numsToRemove--;
         }
     }
-    
-    if(countUniqueSolutions(board) != 1){
+
+    if (countUniqueSolutions(board) != 1) {
         return board;
     }
-    else{
+    else {
         removeNums(dupBoard, difficulty);
     }
 }
 
-function countUniqueSolutions(board : number[][]){
+function countUniqueSolutions(board: number[][]) {
     solutionCounter = 0;
     const dupBoard = board.map((row) => row.slice());
     countUniqueSolutionsHelper(dupBoard);
     return solutionCounter;
 }
 
-function countUniqueSolutionsHelper(board : number[][]){
-    for(let row = 0; row < 9; row++){
-        for(let col = 0; col < 9; col++){
-            if(board[row][col] === 0){
-                for(let num = 1; num < 10; num++){
-                    if(isValidMove(board, row, col, num)){
+function countUniqueSolutionsHelper(board: number[][]) {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (board[row][col] === 0) {
+                for (let num = 1; num < 10; num++) {
+                    if (isValidMove(board, row, col, num)) {
                         board[row][col] = num;
                         countUniqueSolutionsHelper(board);
                         board[row][col] = 0;
 
-                        if(solutionCounter > 1){
+                        if (solutionCounter > 1) {
                             return;
                         }
                     }
@@ -116,6 +108,14 @@ function countUniqueSolutionsHelper(board : number[][]){
         }
     }
     solutionCounter++;
+}
+
+export function setGameRunning(state: boolean) {
+    isGameRunning = state;
+}
+
+export function getGameRunning(): boolean {
+    return isGameRunning;
 }
 
 // function sleep(ms: number): Promise<void> {
