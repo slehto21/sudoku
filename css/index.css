@@ -58,18 +58,25 @@ button {
     display: grid;
 }
 .generateControls {
-    margin-top: auto;
+    margin-top: 0;
     margin-bottom: auto;
     margin-left: 20px;
+    position: relative;
+    top: -25px;
+}
+.generateControls p {
+    margin-top: 5px;  
+    margin-bottom: 5px;  
+    font-size: 16px; 
 }
 .generateButtons {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .generateButtons button {
     background-color: #313131;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     width: 120px; /* Wider buttons */
     padding: 15px; /* More padding for better clickability */
 }
@@ -80,8 +87,10 @@ button {
     width: 380px; /* Match the width of your Sudoku grid for alignment */
     display: flex;
     justify-content: space-between; /* Adjust this to center if you prefer */
-    margin-top: 20px; /* Space between the grid and the buttons */
+    top: 15px; /*Space between the grid and the buttons */
     transform: translateX(-110px);
+    position: relative; 
+    margin-bottom: 10px;
 }
 .bottomButtons button {
     flex-grow: 1; /* Each button takes equal space */

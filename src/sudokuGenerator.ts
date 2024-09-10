@@ -1,6 +1,7 @@
 import { fillClientBoard, solveSudokuBoard, isValidMove, generateEmptySudoku } from "./sudokuSolver.js";
 import { resetWrongMoves } from "./sudokuCheck.js";
 import { resetHints } from "./sudokuHint.js";
+import { resetTimer, startTimer } from "./sudokuTimer.js";
 
 let solutionCounter = 0;
 
@@ -14,6 +15,8 @@ export function generateSudoku(difficulty : String) {
     solvedBoard = board.map(row => row.slice());
     resetWrongMoves();
     resetHints();
+    resetTimer();
+    startTimer();
     removeNums(board, difficulty);
     fillClientBoard(board);
 }
@@ -22,8 +25,8 @@ function resetStyles() {
     const cells = document.querySelectorAll('.sudokuGrid input[type="text"]');
     cells.forEach((cell) => {
         const inputElement = cell as HTMLInputElement;
-        inputElement.style.backgroundColor = '';  // Nollaa taustaväri
-        inputElement.style.color = '';  // Nollaa tekstin väri
+        inputElement.style.backgroundColor = '';
+        inputElement.style.color = ''; 
     });
 }
 
