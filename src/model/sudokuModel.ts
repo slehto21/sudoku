@@ -1,40 +1,49 @@
-import { resetHints } from "./sudokuHint.js";
-import { resetTimer } from "./sudokuTimer.js";
-import { resetWrongMoves } from "./sudokuCheck.js";
-import { setGameRunning, getGameRunning } from "./sudokuGenerator.js";
+import { resetTimer, stopTimer, resetHintsUsed, resetWrongMoves, setGameRunning, startTimer } from "./gameModel.js";
 
-export function solveSudoku() {
-    const board = generateEmptySudoku();
-    fillBoard(board);
-    if (isValidStartingBoard(board)) {
-        solveSudokuBoard(board);
-        fillClientBoard(board);
-    }
-    else {
-        alert('Invalid starting board!')
-    }
-}
+let solutionCounter = 0;
+let solvedBoard: number[][] = [];
 
 export function resetSudoku() {
     setGameRunning(false);
-    resetStyles();
     resetWrongMoves();
-    resetHints();
+    resetHintsUsed();
     resetTimer();
-    let board = generateEmptySudoku();
-    fillClientBoard(board);
+    return generateEmptySudoku();
 }
 
-export function resetStyles() {
-    const cells = document.querySelectorAll('.sudokuGrid input[type="text"]');
-    cells.forEach((cell) => {
-        const inputElement = cell as HTMLInputElement;
-        inputElement.style.backgroundColor = '';
-        inputElement.style.color = '';
-    });
+export function generateSudoku(difficulty: string): number[][] {
+    setGameRunning(true);
+    stopTimer();   
+    startTimer();
+    const board = generateEmptySudoku();
+    initializeWithNums(board, 10);
+    solveSudokuBoard(board);
+    setSolvedBoard(board);
+    removeNums(board, difficulty);
+    return board;
 }
 
-export function generateEmptySudoku() {
+export function solveSudoku(){
+    const board = generateEmptySudoku();
+    fillBoard(board);
+    if(isValidStartingBoard(board)){
+        solveSudokuBoard(board);
+    }
+    else{
+        return null;
+    }
+    return board;
+}
+
+export function setSolvedBoard(board: number[][]) {
+    solvedBoard = board.map(row => row.slice());
+}
+
+export function getSolvedBoard(): number[][] {
+    return solvedBoard.map(row => row.slice());
+}
+
+function generateEmptySudoku() {
     const sudokuBoard: number[][] = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -110,8 +119,6 @@ function isValidStartingBoard(board: number[][]) {
     return true;
 }
 
-
-
 function isNumberInRow(board: number[][], row: number, num: number) {
     for (let i = 0; i < 9; i++) {
         if (board[row][i] === num) {
@@ -143,11 +150,11 @@ function isNumberInBox(board: number[][], row: number, col: number, num: number)
     return false;
 }
 
-export function isValidMove(board: number[][], row: number, col: number, num: number) {
+function isValidMove(board: number[][], row: number, col: number, num: number) {
     return !isNumberInRow(board, row, num) && !isNumberInCol(board, col, num) && !isNumberInBox(board, row, col, num);
 }
 
-export function solveSudokuBoard(board: number[][]) {
+function solveSudokuBoard(board: number[][]) {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (board[row][col] === 0) {
@@ -169,17 +176,91 @@ export function solveSudokuBoard(board: number[][]) {
     return true;
 }
 
-export function fillClientBoard(board: number[][]) {
-    for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-            const inputId = `cell${row}${col}`;
-            const input = document.getElementById(inputId) as HTMLInputElement;
+function initializeWithNums(board: number[][], initialCount: number) {
+    let count = 0;
 
-            if (input) {
-                input.value = board[row][col] !== 0 ? board[row][col].toString() : '';
+    while (count < initialCount) {
+        const randomRow = Math.floor(Math.random() * 9);
+        const randomCol = Math.floor(Math.random() * 9);
+        const num = Math.floor(Math.random() * 9) + 1;
+        if (board[randomRow][randomCol] === 0) {
+            const dupBoard = board.map((row) => row.slice());
+
+            if (isValidMove(dupBoard, randomRow, randomCol, num)) {
+                dupBoard[randomRow][randomCol] = num;
+
+                if (solveSudokuBoard(dupBoard)) {
+                    board[randomRow][randomCol] = num;
+                    count++;
+                }
             }
         }
     }
+}
+
+function determineNumsToRemove(difficulty: String) {
+    let numsToRemove = 0;
+    if (difficulty === "Hard") {
+        numsToRemove = 65;
+    }
+    else if (difficulty === "Medium") {
+        numsToRemove = 55;
+    }
+    else {
+        numsToRemove = 45;
+    }
+    return numsToRemove;
+}
+
+function removeNums(board: number[][], difficulty: String) {
+    let numsToRemove = determineNumsToRemove(difficulty);
+    const dupBoard = board.map((row) => row.slice());
+
+    while (numsToRemove > 0) {
+        const randomRow = Math.floor(Math.random() * 9);
+        const randomCol = Math.floor(Math.random() * 9);
+
+        if (board[randomRow][randomCol] !== 0) {
+            board[randomRow][randomCol] = 0;
+            numsToRemove--;
+        }
+    }
+
+    if (countUniqueSolutions(board) != 1) {
+        return board;
+    }
+    else {
+        removeNums(dupBoard, difficulty);
+    }
+}
+
+function countUniqueSolutions(board: number[][]) {
+    solutionCounter = 0;
+    const dupBoard = board.map((row) => row.slice());
+    countUniqueSolutionsHelper(dupBoard);
+    return solutionCounter;
+}
+
+function countUniqueSolutionsHelper(board: number[][]) {
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            if (board[row][col] === 0) {
+                for (let num = 1; num < 10; num++) {
+                    if (isValidMove(board, row, col, num)) {
+                        board[row][col] = num;
+                        countUniqueSolutionsHelper(board);
+                        board[row][col] = 0;
+
+                        if (solutionCounter > 1) {
+                            return;
+                        }
+                    }
+                }
+                return;
+            }
+        }
+    }
+    solutionCounter++;
 }
 
 export function printSudoku(board: number[][]) {
