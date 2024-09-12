@@ -12,6 +12,23 @@
 <body>
     <h1>Sudoku</h1>
     <div class="sudokuContainer">
+        <div id="endGameModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="completionHeader"></h2>
+                <p id="completionMessage"></p>
+                <button id="newGameButton">Time for another? <br> Start New Game</button>
+            </div>
+        </div>
+        <div id="difficultyModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Select Difficulty</h2>
+                <button id="modalEasyButton">Easy</button>
+                <button id="modalMediumButton">Medium</button>
+                <button id="modalHardButton">Hard</button>
+            </div>
+        </div>
         <div class="sudokuGrid">
             <table id="sudokuTable" class="sudoku" oninput="validateInput(event)">
                 <tr>
@@ -125,6 +142,13 @@
             <p id="timer"></p>
             <p id="wrongMovesCounter"></p>
             <p id="hintsCounter"></p>
+        </div>
+    </div>
+    <div id="confirmSolveModal" class="modal">
+        <div class="modal-content">
+            <h2>Are you sure you want to solve the sudoku?</h2>
+            <button id="confirmSolveButton">Yes, solve it</button>
+            <button id="cancelSolveButton">No, keep playing</button>
         </div>
     </div>
     <div class="bottomButtons">

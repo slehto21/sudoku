@@ -1,6 +1,6 @@
-import { getGameRunning, getBoardState, getEmptyCell, incrementHintsUsed, incrementWrongMoves, getWrongMoves, getHintsUsed } from "../model/gameModel.js";
-import { updateHintsDisplay, placeHintOnBoard, updateWrongMovesDisplay, setCellBackground, updateTimerDisplay } from "../view/gameView.js";
-import { getSolvedBoard } from "../model/sudokuModel.js";
+import { getGameRunning, getBoardState, getEmptyCell, incrementHintsUsed, incrementWrongMoves, getWrongMoves, getHintsUsed, getGameTime } from "../model/gameModel.js";
+import { updateHintsDisplay, placeHintOnBoard, updateWrongMovesDisplay, setCellBackground, updateTimerDisplay, completionModal } from "../view/gameView.js";
+import { compareBoards, endGame, getSolvedBoard } from "../model/sudokuModel.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const cells = document.querySelectorAll('.sudokuGrid input[type="text"]');
@@ -16,7 +16,7 @@ function handleInput(event: Event, index: number) {
     if (!getGameRunning()) {
         return;
     }
-    
+
     const solvedBoard = getSolvedBoard();
     const inputElement = event.target as HTMLInputElement;
     const row = Math.floor(index / 9);
@@ -24,15 +24,23 @@ function handleInput(event: Event, index: number) {
     const userInput = parseInt(inputElement.value);
 
     if (isNaN(userInput) || inputElement.value === '' || userInput === 0) {
-        setCellBackground(inputElement, '');  
+        setCellBackground(inputElement, '');
         return;
     }
 
     if (userInput !== solvedBoard[row][col]) {
-        setCellBackground(inputElement, 'red'); 
+        setCellBackground(inputElement, 'red');
         incrementWrongMoves();
+        updateWrongMovesDisplay(getWrongMoves(), getGameRunning());
+        return;
     }
-    updateWrongMovesDisplay(getWrongMoves(), getGameRunning());
+
+    const board = getBoardState();
+    if (compareBoards(board, solvedBoard)) {
+        endGame();
+
+        completionModal(getGameTime(), getWrongMoves(), getHintsUsed(), getGameRunning());
+    }
 }
 
 export function getHint() {
@@ -48,6 +56,11 @@ export function getHint() {
     incrementHintsUsed();
     updateHintsDisplay(getHintsUsed(), getGameRunning());
     placeHintOnBoard(emptyCell, getSolvedBoard());
+
+    if (compareBoards(getBoardState(), getSolvedBoard())) {
+        endGame();
+        completionModal(getGameTime(), getWrongMoves(), getHintsUsed(), getGameRunning());
+    }
 }
 
 export function handleTimerDisplay(hours: number, minutes: number, seconds: number) {

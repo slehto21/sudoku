@@ -7,7 +7,7 @@ export function resetStyles() {
     });
 }
 
-export function fillClientBoard(board: number[][]) {
+export function fillClientBoard(board: number[][], solve: boolean) {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             const inputId = `cell${row}${col}`;
@@ -15,6 +15,9 @@ export function fillClientBoard(board: number[][]) {
 
             if (input) {
                 input.value = board[row][col] !== 0 ? board[row][col].toString() : '';
+                if (solve) {
+                    input.style.color = 'green';
+                }
             }
         }
     }

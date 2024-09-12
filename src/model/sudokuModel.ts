@@ -1,4 +1,4 @@
-import { resetTimer, stopTimer, resetHintsUsed, resetWrongMoves, setGameRunning, startTimer } from "./gameModel.js";
+import { resetTimer, stopTimer, resetHintsUsed, resetWrongMoves, setGameRunning, startTimer, setEndTime } from "./gameModel.js";
 
 let solutionCounter = 0;
 let solvedBoard: number[][] = [];
@@ -12,8 +12,10 @@ export function resetSudoku() {
 }
 
 export function generateSudoku(difficulty: string): number[][] {
+    resetHintsUsed();
+    resetWrongMoves();
     setGameRunning(true);
-    stopTimer();   
+    stopTimer();
     startTimer();
     const board = generateEmptySudoku();
     initializeWithNums(board, 10);
@@ -23,16 +25,38 @@ export function generateSudoku(difficulty: string): number[][] {
     return board;
 }
 
-export function solveSudoku(){
+export function solveSudoku() {
     const board = generateEmptySudoku();
     fillBoard(board);
-    if(isValidStartingBoard(board)){
+    if (isValidStartingBoard(board)) {
         solveSudokuBoard(board);
     }
-    else{
+    else {
         return null;
     }
+    resetHintsUsed();
+    resetWrongMoves();
+    resetTimer();
+    setGameRunning(false);
     return board;
+}
+
+export function compareBoards(a: any[][], b: any[][]): boolean {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; i++) {
+        if (!a[i].every((val: any, index: number) => val === b[i][index])) return false;
+    }
+
+    return true;
+}
+
+export function endGame() {
+    setGameRunning(false);
+    stopTimer();
+    setEndTime();
 }
 
 export function setSolvedBoard(board: number[][]) {

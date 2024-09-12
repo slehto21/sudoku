@@ -4,6 +4,7 @@ let wrongMoves = 0;
 let hintsUsed = 0;
 let gameRunning = false;
 let startTime: Date | null;
+let endTime: Date | null;
 let timerInterval: NodeJS.Timeout | undefined = undefined;
 
 export function resetWrongMoves() {
@@ -101,6 +102,25 @@ export function getElapsedTime() {
         const minutes = Math.floor(elapsedTime / 1000 / 60) % 60;
         const hours = Math.floor(elapsedTime / 1000 / 60 / 60);
 
+        return { hours, minutes, seconds };
+    }
+    return { hours: 0, minutes: 0, seconds: 0 };
+}
+
+export function getEndTime(): Date | null {
+    return endTime;
+}
+
+export function setEndTime() {
+    endTime = new Date();
+}
+
+export function getGameTime() {
+    if (startTime && endTime) {
+        const duration = endTime.getTime() - startTime.getTime();
+        const seconds = Math.floor(duration / 1000) % 60;
+        const minutes = Math.floor(duration / 1000 / 60) % 60;
+        const hours = Math.floor(duration / 1000 / 60 / 60);
         return { hours, minutes, seconds };
     }
     return { hours: 0, minutes: 0, seconds: 0 };
