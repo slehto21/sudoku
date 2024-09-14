@@ -1,0 +1,160 @@
+<html>
+
+<head>
+    <title>Sudoku Solver</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script type="module" src="src/controller/eventHandlers.js"></script>
+    <script type="module" src="src/controller/gameContoller.js"></script>
+    <script type="module" src="src/controller/sudokuController.js"></script>
+    <script type="module" src="src/controller/validateInput.js"></script>
+</head>
+
+<body>
+    <h1>Sudoku</h1>
+    <div class="sudokuContainer">
+        <div id="endGameModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="completionHeader"></h2>
+                <p id="completionMessage"></p>
+                <button id="newGameButton">Time for another? <br> Start New Game</button>
+            </div>
+        </div>
+        <div id="difficultyModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Select Difficulty</h2>
+                <button id="modalEasyButton">Easy</button>
+                <button id="modalMediumButton">Medium</button>
+                <button id="modalHardButton">Hard</button>
+            </div>
+        </div>
+        <div class="sudokuGrid">
+            <table id="sudokuTable" class="sudoku" oninput="validateInput(event)">
+                <tr>
+                    <td><input type="text" id="cell00" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell01" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell02" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell03" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell04" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell05" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell06" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell07" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell08" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell10" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell11" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell12" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell13" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell14" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell15" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell16" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell17" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell18" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell20" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell21" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell22" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell23" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell24" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell25" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell26" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell27" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell28" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell30" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell31" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell32" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell33" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell34" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell35" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell36" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell37" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell38" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell40" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell41" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell42" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell43" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell44" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell45" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell46" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell47" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell48" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell50" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell51" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell52" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell53" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell54" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell55" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell56" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell57" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell58" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell60" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell61" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell62" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell63" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell64" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell65" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell66" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell67" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell68" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell70" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell71" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell72" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell73" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell74" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell75" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell76" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell77" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell78" size="1" maxlength="1"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="cell80" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell81" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell82" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell83" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell84" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell85" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell86" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell87" size="1" maxlength="1"></td>
+                    <td><input type="text" id="cell88" size="1" maxlength="1"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="generateControls">
+            <h2>Generate Sudoku</h2>
+            <div class="generateButtons">
+                <button type="button" id="easyButton">Easy</button>
+                <button type="button" id="mediumButton">Medium</button>
+                <button type="button" id="hardButton">Hard</button>
+            </div>
+            <p id="timer"></p>
+            <p id="wrongMovesCounter"></p>
+            <p id="hintsCounter"></p>
+        </div>
+    </div>
+    <div id="confirmSolveModal" class="modal">
+        <div class="modal-content">
+            <h2>Are you sure you want to solve the sudoku?</h2>
+            <button id="confirmSolveButton">Yes, solve it</button>
+            <button id="cancelSolveButton">No, keep playing</button>
+        </div>
+    </div>
+    <div class="bottomButtons">
+        <button type="button" id="solveButton">Solve</button>
+        <button type="button" id="hintButton">Hint</button>
+        <button type="button" id="resetButton">Reset</button>
+    </div>
+
+</html>
