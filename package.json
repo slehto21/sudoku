@@ -1,7 +1,13 @@
 {
   "type": "module",
+  "scripts": {
+  "build": "tsc && npx cpy index.html build/ && npx cpy css/**/* build/css/ --parents",
+  "start": "http-server ./build"
+},
   "devDependencies": {
     "@types/node": "^20.12.11",
+    "cpy-cli": "^5.0.0",
+    "http-server": "^14.1.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
