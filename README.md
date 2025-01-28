@@ -14,6 +14,9 @@ This is a simple Sudoku game built with TypeScript, HTML, and CSS.
 - CSS
 - TypeScript
 - Node.js
+- Robot Framework
+- Selenium WebDriver
+- Python
 
 ## Installation
 To run this project locally, follow these steps:
