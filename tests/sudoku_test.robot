@@ -3,6 +3,8 @@ Library    SeleniumLibrary
 Library    Collections
 Library    SudokuSolverLibrary.py
 Library    String
+Test Setup    Open Browser With Options
+Test Teardown    Close Browser
 
 *** Variables ***
 ${BROWSER}       chrome
@@ -20,7 +22,6 @@ ${GRID_SIZE}   9
 
 *** Test Cases ***
 Verify Main Buttons Are Visible
-    Open Browser    ${URL}    ${BROWSER}
     Page Should Contain Button    Easy
     Page Should Contain Button    Medium
     Page Should Contain Button    Hard
@@ -29,7 +30,6 @@ Verify Main Buttons Are Visible
     Close Browser
 
 Verify Game Start
-    Open Browser    ${URL}    ${BROWSER}
     Maximize Browser Window
     Generate New Sudoku
     Wait Until Element Contains    id=${TIMER_ID}    00:00:03    timeout=5s
@@ -38,7 +38,6 @@ Verify Game Start
     Close Browser
 
 Verify Hints Button Increment
-    Open Browser    ${URL}    ${BROWSER}
     Maximize Browser Window
     Generate New Sudoku
     Click Button    id=${HINTS_BUTTON_ID}
@@ -46,7 +45,6 @@ Verify Hints Button Increment
     Close Browser
 
 Verify Wrong Moves Increment
-    Open Browser    ${URL}    ${BROWSER}
     Maximize Browser Window
     Generate New Sudoku
     ${empty_cell}=    Find First Empty Cell
@@ -59,7 +57,6 @@ Verify Wrong Moves Increment
     Close Browser
 
 Validate Input Field
-    Open Browser    ${URL}    ${BROWSER}
     Maximize Browser Window
     Input Text    id=cell00    0
     Sleep         1s
@@ -85,7 +82,6 @@ Validate Input Field
     Close Browser
 
 Verify Game Reset
-    Open Browser    ${URL}    ${BROWSER}
     Maximize Browser Window
     Generate New Sudoku
     Click Button    id=${RESET_BUTTON_ID}
@@ -97,7 +93,6 @@ Verify Game Reset
     Close Browser
 
 Solve Generated Sudoku
-    Open Browser    ${URL}    chrome
     Maximize Browser Window
     Generate New Sudoku
     ${initial_board}=    Read Sudoku Board
@@ -120,6 +115,10 @@ Solve Generated Sudoku
     Close Browser
 
 *** Keywords ***
+Open Browser With Options
+    Open Browser    ${URL}    ${BROWSER}    options=add_argument("--headless=new")
+    Maximize Browser Window
+
 Find First Empty Cell
     ${cells}=    Get WebElements    css:.sudokuGrid input[type="text"]
     FOR    ${cell}    IN    @{cells}
